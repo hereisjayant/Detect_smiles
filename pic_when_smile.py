@@ -39,12 +39,14 @@ while 1:
             minNeighbors=10,
             minSize=(5,5)
             )
+        i=1
         for (ex, ey, ew, eh) in eyes:#rectangles for eyes\
             
             #this is where we actually click take the picture
             print("Taking picture...")
             camera_capture = get_img()
-            file_name = "test_image.png"
+            file_name = "test_image"+str(i)+".png"
+            i= i+1
             cv2.imwrite(file_name, camera_capture)
             #this highlights the image
             cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh), (255,0,0), 1)
