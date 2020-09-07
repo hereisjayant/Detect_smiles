@@ -4,6 +4,8 @@ import cv2
 #cascade used for the face
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_frontalface_default.xml')
 eye_cascade  = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_eye.xml')
+smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_smile.xml')
+
 
 camera = cv2.VideoCapture(0)
 camera.set(3,1280) # set Width
@@ -33,24 +35,22 @@ while 1:
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = img[y:y+h, x:x+w]
         
-        eyes = eye_cascade.detectMultiScale(
-            roi_gray,
+        #identifying the face
+        smile = smile_cascade.detectMultiScale(
+            roi_gray, #source
             scaleFactor=1.5,
             minNeighbors=10,
             minSize=(5,5)
             )
         i=1
-        for (ex, ey, ew, eh) in eyes:#rectangles for eyes\
-            
-            #this is where we actually click take the picture
-            print("Taking picture...")
+        for(sx, sy, sw, sh) in smile:   #creating rectangles and getting screen shots
+            print("taking pic...")
             camera_capture = get_img()
-            file_name = "test_image"+str(i)+".png"
-            i= i+1
+            file_name = "Smile"+str(i)+".png"
+            i = i+1
             cv2.imwrite(file_name, camera_capture)
-            #this highlights the image
-            cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh), (255,0,0), 1)
-
+            #for the rectangle
+            cv2.rectangle(roi_color, (sx, sy), ((sx+sw), (sy+sh)), (255, 0, 0), 1)
     cv2.imshow('Output',img)
 
     k = cv2.waitKey(30) & 0xff
